@@ -70,7 +70,6 @@ public class UserInputManager : MonoSingleton<UserInputManager>
         base.Awake();
 
         KeyListFilePath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Config/keylist.json");
-        Debug.Log(KeyListFilePath);
 
         if (!File.Exists(KeyListFilePath))
         {
@@ -89,11 +88,7 @@ public class UserInputManager : MonoSingleton<UserInputManager>
 
         InputKeyMappingList[UserInputKeyCode.MULTI_KEY_1] = new MappingKeyProfile(new List<KeyMember>() { new KeyMember(KeyCode.LeftControl, PressType.down), new KeyMember(KeyCode.Z) }, "multi key 1", new UnityEvent<bool>());
         InputKeyMappingList[UserInputKeyCode.MULTI_KEY_2] = new MappingKeyProfile(new List<KeyMember>() { new KeyMember(KeyCode.LeftAlt, PressType.down), new KeyMember(KeyCode.A) }, "multi key 2", new UnityEvent<bool>());
-        preventKeystrokes = false;
-    }
 
-    private void Start()
-    {
         string strJsonData = File.ReadAllText(KeyListFilePath, System.Text.Encoding.UTF8);
 
         if (string.IsNullOrEmpty(strJsonData))
@@ -111,6 +106,13 @@ public class UserInputManager : MonoSingleton<UserInputManager>
                 m_inputKeyMappingList[inputKeyItem.Key].SetKeyCodes(inputKeyItem.Value.keyCodes);
             }
         }
+
+        preventKeystrokes = false;
+    }
+
+    private void Start()
+    {
+        
     }
 
     public void SetInputKey(UserInputKeyCode userInputKeyCode, List<KeyMember> keyMembers)
@@ -120,12 +122,6 @@ public class UserInputManager : MonoSingleton<UserInputManager>
 
 
     public void Save()
-    {
-        string json = JsonConvert.SerializeObject(InputKeyMappingList);
-        File.WriteAllText(KeyListFilePath, json, System.Text.Encoding.UTF8);
-    }
-
-    public void Restore()
     {
         string json = JsonConvert.SerializeObject(InputKeyMappingList);
         File.WriteAllText(KeyListFilePath, json, System.Text.Encoding.UTF8);

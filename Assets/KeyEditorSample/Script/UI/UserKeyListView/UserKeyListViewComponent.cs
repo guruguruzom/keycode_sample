@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class UserKeyListViewComponent : MonoBehaviour, IPointerClickHandler
 {
@@ -11,14 +12,18 @@ public class UserKeyListViewComponent : MonoBehaviour, IPointerClickHandler
     // Start is called before the first frame update
 
     [SerializeField]
-    private Text TextName;
+    private TMP_Text TextName;
 
     [SerializeField]
-    private Text TextKeyCode;
+    private TMP_Text TextKeyCode;
 
     [SerializeField]
-    private SelectListEvent selectListEvent;
+    private Color SelectColor;
 
+    [SerializeField]
+    private Color DefaultColor;
+
+    public SelectListEvent selectListEvent;
 
     public void SetData(UserKeyListViewDescription item)
     {
@@ -27,18 +32,27 @@ public class UserKeyListViewComponent : MonoBehaviour, IPointerClickHandler
             strKeyCodes += keyMember.keycode + "+";
         }
 
-        strKeyCodes.Substring(0, strKeyCodes.Length - 1);
+        strKeyCodes = strKeyCodes.Substring(0, strKeyCodes.Length - 1);
         Item = item;
 
         if (Item != null)
         {
+            gameObject.name = item.KeyProfile.comment;
             TextName.text = item.KeyProfile.comment;
             TextKeyCode.text = strKeyCodes;
         }
     }
 
+    public void Select() {
+        GetComponent<Image>().color = SelectColor;
+    }
+    public void DeSelect()
+    {
+        GetComponent<Image>().color = DefaultColor;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        selectListEvent.Invoke(this);
+        selectListEvent?.Invoke(this);
     }
 }
